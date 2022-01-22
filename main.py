@@ -10,11 +10,12 @@ class Webscraper(unittest.TestCase):
         self.driver.get("https://www.imdb.com/chart/top")
         print("Setup finished")
 
-    def test_search(self):
-        filmhandler = FilmHandler(self.driver)
-        filmhandler.is_title_matches()
-        filmhandler.Scraper()
-        print("test")
+    def test_scrape(self):
+        print("Test scrape")
+        filmhandler = FilmDataManager(self.driver)
+        assert filmhandler.is_title_matches()
+        df = filmhandler.Scraper()
+        assert filmhandler.is_data_correct(df)
 
     def tearDown(self):
         print("End")
