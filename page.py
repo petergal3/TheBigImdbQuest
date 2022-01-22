@@ -62,7 +62,7 @@ class FilmDataManager(BasePage):
 
         list_ = self.driver.find_element_by_class_name('lister-list').find_elements_by_tag_name('tr')
         df = pd.DataFrame(columns=["title", "oscars_number", "rating", "review_number"])
-        number_of_films = 100
+        number_of_films = 3
         titles = []
         imdb_links = []
 
@@ -85,7 +85,10 @@ class FilmDataManager(BasePage):
         return df
 
     def Review_penalizer(self, df):
-        return 0
+        max = df["review_number"].max()
+        n = len(df.index)
+        df["rating_new"] = df["rating"] - (((max - df["review_number"]) // 100000) / 10)
+        print(df)
 
     def Oscar_calculator(self, df):
         return 0
