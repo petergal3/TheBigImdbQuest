@@ -17,7 +17,9 @@ class Webscraper(unittest.TestCase):
         df = filmhandler.Scraper()
         assert filmhandler.is_data_correct(df)
 
-        filmhandler.Review_penalizer(df)
+        df = filmhandler.Review_penalizer(df)
+
+        df = filmhandler.Oscar_calculator(df)
 
     def tearDown(self):
         print("End")

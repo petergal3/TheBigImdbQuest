@@ -51,8 +51,6 @@ class FilmDataManager(BasePage):
         to_append = [str(title), int(oscars_num), float(rating), int(reviewer_num)]
         return to_append
 
-    def Data_maninpulator(self):
-        return 0
 
     #returns the scraped data from films in pandas dataframe
     def Scraper(self):
@@ -87,8 +85,28 @@ class FilmDataManager(BasePage):
     def Review_penalizer(self, df):
         max = df["review_number"].max()
         n = len(df.index)
+        df["review_adjustment"] = (((max - df["review_number"]) // 100000) / 10)
         df["rating_new"] = df["rating"] - (((max - df["review_number"]) // 100000) / 10)
         print(df)
+        return df
 
     def Oscar_calculator(self, df):
-        return 0
+        adjustment = 0
+        n = len(df.index)
+        adjustment
+        df["oscar_adjustment"] = 0
+        for i in range(n):
+            if 0 < df["oscars_number"].iloc[i] < 3:
+                 adjustment = 0.3
+            elif 2 < df["oscars_number"].iloc[i] < 6:
+                adjustment = 0.5
+            elif 5 < df["oscars_number"].iloc[i] < 11:
+                adjustment = 1
+            elif 10 < df["oscars_number"].iloc[i] :
+                adjustment = 1.5
+
+            df["oscar_adjustment"].iloc[i] = adjustment
+            df["rating_new"].iloc[i] = df["rating_new"].iloc[i] + adjustment
+
+        print(df)
+        return df
