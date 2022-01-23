@@ -12,14 +12,30 @@ class Webscraper(unittest.TestCase):
 
     def test_scrape(self):
         print("Test scrape")
-        filmhandler = FilmDataManager(self.driver)
-        assert filmhandler.is_title_matches()
-        df = filmhandler.Scraper()
-        assert filmhandler.is_data_correct(df)
 
-        df = filmhandler.Review_penalizer(df)
+        #create instance of FilmDataManager
+        film_data_manager = FilmDataManager(self.driver)
+        assert film_data_manager.is_title_matches()
 
-        df = filmhandler.Oscar_calculator(df)
+        #scrape data from imdb
+        df = film_data_manager.Scraper()
+        assert film_data_manager.is_data_correct(df)
+
+        #adjust rating
+        df = film_data_manager.Review_penalizer(df)
+        assert film_data_manager.is_penalizer_correct(df)
+
+        #adjust rating
+        df = film_data_manager.Oscar_calculator(df)
+        assert film_data_manager.is_oscar_calculator_correct(df)
+
+        #write data and test
+        df = df.sort_values(by='rating_new', ascending=False)
+        df.to_csv("film_data.csv", encoding="utf-8", index=False, sep='\t')
+        print(pd.read_csv("film_data.csv", sep='\t'))
+        assert film_data_manager.is_data_correct(df)
+
+        print("Test scrape finished")
 
     def tearDown(self):
         print("End")
